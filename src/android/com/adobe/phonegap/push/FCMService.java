@@ -416,8 +416,8 @@ public class FCMService extends FirebaseMessagingService implements PushConstant
       mBuilder = new NotificationCompat.Builder(context);
     }
 
-    mBuilder.setWhen(System.currentTimeMillis()).setContentTitle(fromHtml(extras.getString(TITLE)))
-        .setTicker(fromHtml(extras.getString(TITLE))).setContentIntent(contentIntent).setDeleteIntent(deleteIntent)
+    mBuilder.setWhen(System.currentTimeMillis()).setContentTitle(extras.getString(TITLE))
+        .setTicker(extras.getString(TITLE)).setContentIntent(contentIntent).setDeleteIntent(deleteIntent)
         .setAutoCancel(true);
 
     SharedPreferences prefs = context.getSharedPreferences(PushPlugin.COM_ADOBE_PHONEGAP_PUSH, Context.MODE_PRIVATE);
@@ -663,7 +663,7 @@ public class FCMService extends FirebaseMessagingService implements PushConstant
     if (STYLE_INBOX.equals(style)) {
       setNotification(notId, message);
 
-      mBuilder.setContentText(fromHtml(message));
+      mBuilder.setContentText(message);
 
       ArrayList<String> messageList = messageMap.get(notId);
       Integer sizeList = messageList.size();
@@ -675,18 +675,18 @@ public class FCMService extends FirebaseMessagingService implements PushConstant
           stacking = stacking.replace("%n%", sizeListMessage);
         }
         NotificationCompat.InboxStyle notificationInbox = new NotificationCompat.InboxStyle()
-            .setBigContentTitle(fromHtml(extras.getString(TITLE))).setSummaryText(fromHtml(stacking));
+            .setBigContentTitle(extras.getString(TITLE))).setSummaryText(stacking);
 
         for (int i = messageList.size() - 1; i >= 0; i--) {
-          notificationInbox.addLine(fromHtml(messageList.get(i)));
+          notificationInbox.addLine(messageList.get(i));
         }
 
         mBuilder.setStyle(notificationInbox);
       } else {
         NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
         if (message != null) {
-          bigText.bigText(fromHtml(message));
-          bigText.setBigContentTitle(fromHtml(extras.getString(TITLE)));
+          bigText.bigText(message));
+          bigText.setBigContentTitle(extras.getString(TITLE));
           mBuilder.setStyle(bigText);
         }
       }
@@ -695,11 +695,11 @@ public class FCMService extends FirebaseMessagingService implements PushConstant
 
       NotificationCompat.BigPictureStyle bigPicture = new NotificationCompat.BigPictureStyle();
       bigPicture.bigPicture(getBitmapFromURL(extras.getString(PICTURE)));
-      bigPicture.setBigContentTitle(fromHtml(extras.getString(TITLE)));
-      bigPicture.setSummaryText(fromHtml(extras.getString(SUMMARY_TEXT)));
+      bigPicture.setBigContentTitle(extras.getString(TITLE));
+      bigPicture.setSummaryText(extras.getString(SUMMARY_TEXT));
 
-      mBuilder.setContentTitle(fromHtml(extras.getString(TITLE)));
-      mBuilder.setContentText(fromHtml(message));
+      mBuilder.setContentTitle(extras.getString(TITLE));
+      mBuilder.setContentText(message);
 
       mBuilder.setStyle(bigPicture);
     } else {
@@ -708,14 +708,14 @@ public class FCMService extends FirebaseMessagingService implements PushConstant
       NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
 
       if (message != null) {
-        mBuilder.setContentText(fromHtml(message));
+        mBuilder.setContentText(message);
 
-        bigText.bigText(fromHtml(message));
-        bigText.setBigContentTitle(fromHtml(extras.getString(TITLE)));
+        bigText.bigText(message);
+        bigText.setBigContentTitle(extras.getString(TITLE));
 
         String summaryText = extras.getString(SUMMARY_TEXT);
         if (summaryText != null) {
-          bigText.setSummaryText(fromHtml(summaryText));
+          bigText.setSummaryText(summaryText);
         }
 
         mBuilder.setStyle(bigText);
@@ -929,13 +929,6 @@ public class FCMService extends FirebaseMessagingService implements PushConstant
     }
 
     return retval;
-  }
-
-  private Spanned fromHtml(String source) {
-    if (source != null)
-      return Html.fromHtml(source);
-    else
-      return null;
   }
 
   private boolean isAvailableSender(String from) {
